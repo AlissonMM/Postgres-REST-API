@@ -60,4 +60,10 @@ public class UserController {
 
     }
 
+    @PutMapping()
+    public void putUser(@RequestBody User user){
+        userRepository.save(user);
+
+    }
+
 }
