@@ -1,6 +1,6 @@
 package alisson.FirstWebAPI.model;
 
-import jakarta.persistence.*;
+import javax.persistence.*;
 
 @Entity
 @Table(name = "tab_user")
