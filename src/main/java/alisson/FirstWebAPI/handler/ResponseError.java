@@ -3,9 +3,13 @@ package alisson.FirstWebAPI.handler;
 import java.util.Date;
 
 public class ResponseError {
+    //The exact moment the exception is invoked
     private Date timestamp = new Date();
+    //Customize according to your business
     private String status = "error";
+    //Can be an error code dictionary
     private int statusCode = 400;
+    //Message shown to the user
     private String error;
 
     public Date getTimestamp() {

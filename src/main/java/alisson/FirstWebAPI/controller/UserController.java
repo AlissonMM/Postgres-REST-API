@@ -1,5 +1,7 @@
 package alisson.FirstWebAPI.controller;
 
+import alisson.FirstWebAPI.handler.BusinessException;
+import alisson.FirstWebAPI.handler.RequiredFieldException;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import alisson.FirstWebAPI.model.User;
@@ -12,6 +14,7 @@ import alisson.FirstWebAPI.beansFactory.Beans;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.regex.Pattern;
 
 @RestController
 @RequestMapping("/users")
@@ -20,6 +23,7 @@ public class UserController {
     UserRepository userRepository;
     @Autowired
     ObjectMapper objectMapper;
+
 
     //GetMapping is used to define which http will be used
     @GetMapping()
@@ -56,13 +60,73 @@ public class UserController {
     //{"login":"postTest","password":"testPassword"}
     @PostMapping()
     public void postUser(@RequestBody User user){
-        userRepository.save(user);
+//        if (user.getLogin().isEmpty() || user.getPassword() == null || user.getPassword() == "") {
+//            throw new BusinessException("All attributes must be valid!");
+//        }
+
+        //passwordRequirements
+        boolean isThereCapital = Pattern.compile("[A-Z]").matcher(user.getPassword()).find();
+        boolean isCommonSequence = !user.getPassword().matches(".*(?i)123456.*|.*(?i)abcdef.*");
+        boolean isCommonWord = !user.getPassword().equalsIgnoreCase("password") && !user.getPassword().equalsIgnoreCase("123456") && !user.getPassword().equalsIgnoreCase("qwerty");
+
+
+        if (user.getLogin().isEmpty() || user.getLogin() == ""){
+            throw new RequiredFieldException("Login");
+        }
+
+        else if(user.getPassword() == null || user.getPassword() == ""){
+            throw new RequiredFieldException("Password");
+        }
+
+        else if(!isThereCapital){
+            throw new BusinessException("Password must have at least one Capital Letter");
+        }
+
+        else if(!isCommonSequence){
+            throw new BusinessException("Password is too common");
+        }
+
+        else if(!isCommonWord){
+            throw new BusinessException("Password is too common");
+        }
+
+        else {
+            userRepository.save(user);
+        }
 
     }
 
     @PutMapping()
     public void putUser(@RequestBody User user){
-        userRepository.save(user);
+        //passwordRequirements
+        boolean isThereCapital = Pattern.compile("[A-Z]").matcher(user.getPassword()).find();
+        boolean isCommonSequence = !user.getPassword().matches(".*(?i)123456.*|.*(?i)abcdef.*");
+        boolean isCommonWord = !user.getPassword().equalsIgnoreCase("password") && !user.getPassword().equalsIgnoreCase("123456") && !user.getPassword().equalsIgnoreCase("qwerty");
+
+
+        if (user.getLogin().isEmpty() || user.getLogin() == ""){
+            throw new RequiredFieldException("Login");
+        }
+
+        else if(user.getPassword() == null || user.getPassword() == ""){
+            throw new RequiredFieldException("Password");
+        }
+
+        else if(!isThereCapital){
+            throw new BusinessException("Password must have at least one Capital Letter");
+        }
+
+        else if(!isCommonSequence){
+            throw new BusinessException("Password is too common");
+        }
+
+        else if(!isCommonWord){
+            throw new BusinessException("Password is too common");
+        }
+
+        else {
+            userRepository.save(user);
+        }
 
     }
 
